@@ -1,0 +1,15 @@
+# Virtual Environment
+venv/
+
+# Python Cache
+__pycache__/
+*.pyc
+
+# Logs
+logs/
+
+# VS Code Settings
+.vscode/
+
+# Reports
+reports/*.txt
