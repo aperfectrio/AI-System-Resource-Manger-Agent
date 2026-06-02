@@ -4,14 +4,25 @@ from modules.monitor import (
     get_disk_usage
 )
 
-print("=" * 50)
-print("AI System Resource Manager Agent")
-print("=" * 50)
+import os
+import time
 
-cpu = get_cpu_usage()
-ram = get_ram_usage()
-disk = get_disk_usage()
 
-print(f"CPU Usage  : {cpu}%")
-print(f"RAM Usage  : {ram}%")
-print(f"Disk Usage : {disk}%")
+while True:
+    os.system("cls")  # clear terminal (Windows)
+
+    print("=" * 50)
+    print("AI System Resource Manager Agent")
+    print("=" * 50)
+
+    cpu = get_cpu_usage()
+    ram = get_ram_usage()
+    disk = get_disk_usage()
+
+    print(f"CPU Usage  : {cpu}%")
+    print(f"RAM Usage  : {ram}%")
+    print(f"Disk Usage : {disk}%")
+
+    print("\nRefreshing every second...")
+
+    time.sleep(1)
