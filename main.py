@@ -6,7 +6,8 @@ from modules.monitor import (
 )
 
 from modules.analyzer import (
-    get_top_memory_processes
+    get_top_memory_processes,
+    get_top_cpu_processes
 )
 
 import os
@@ -38,7 +39,16 @@ while True:
             f"{process['name']:<25}"
             f"{process['memory']:.2f} MB"
         )
+    print("\nTop CPU Processes")
+    print("-" * 50)
 
+    cpu_processes = get_top_cpu_processes()
+
+    for process in cpu_processes:
+        print(
+            f"{process['name']:<25}"
+            f"{process['cpu']:.2f}%"
+        )
     print("\nRefreshing every second...")
 
     time.sleep(1)
