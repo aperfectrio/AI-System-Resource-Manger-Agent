@@ -13,3 +13,6 @@ logs/
 
 # Reports
 reports/*.txt
+
+# Spotify Pid and processes finder
+find_spotify.py
