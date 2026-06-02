@@ -1,5 +1,7 @@
 import psutil
 
+from modules.logger import write_log
+
 
 ALLOWED_PROCESSES = [
     "Spotify.exe",
@@ -24,7 +26,7 @@ def terminate_process(process_name):
         try:
             if process.info['name'].lower() == process_name.lower():
 
-                process.kill()   # stronger than terminate()
+                process.kill()
 
                 terminated_count += 1
 
@@ -36,9 +38,18 @@ def terminate_process(process_name):
             pass
 
     if terminated_count > 0:
+
+        message = (
+            f"Terminated {terminated_count} instance(s) of {process_name}."
+        )
+
+        write_log(
+            f"ACTION: {message}"
+        )
+
         return (
             True,
-            f"Terminated {terminated_count} instance(s) of {process_name}."
+            message
         )
 
     return (
