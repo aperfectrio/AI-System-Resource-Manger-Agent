@@ -13,6 +13,10 @@ from modules.decision_engine import (
     generate_recommendations
 )
 
+from modules.notifier import (
+    get_system_status
+)
+
 import os
 import time
 
@@ -57,14 +61,26 @@ while True:
         )
 
     # Recommendations
-    print("\nRecommendations")
-    print("-" * 50)
-
     recommendations = generate_recommendations(
         cpu,
         ram,
         disk
     )
+
+    # Notification Module
+    status, message = get_system_status(
+        recommendations
+    )
+
+    print("\nSystem Notification")
+    print("-" * 50)
+
+    print(f"Status : {status}")
+    print(f"Message: {message}")
+
+    # Recommendations Display
+    print("\nRecommendations")
+    print("-" * 50)
 
     for recommendation in recommendations:
         print(recommendation)
