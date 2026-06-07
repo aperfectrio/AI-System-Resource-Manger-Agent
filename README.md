@@ -1,43 +1,100 @@
 # AI System Resource Manager Agent
 
-A system monitoring and optimization application developed for an Operating Systems project.
+A system monitoring and optimization application developed as part of an Operating Systems project.
 
-The project monitors CPU, RAM, and Disk usage, analyzes running processes, generates recommendations based on system conditions, and provides a web-based dashboard for visualization and management.
+The project monitors CPU, RAM, and Disk usage, analyzes running processes, evaluates system health, generates recommendations, and provides safe optimization actions through a web-based dashboard.
 
 The application was developed using Python, Flask, and psutil.
 
 ---
 
-## Project Overview
+# Project Overview
 
 The system follows the basic structure of an intelligent agent:
 
+```text
 Observe → Analyze → Decide → Act
+```
 
-The monitoring module collects resource usage information from the operating system. The analyzer identifies resource-intensive processes. The decision engine evaluates system conditions and generates recommendations. The action module performs safe optimization actions and records them in a log file.
+### Observe
+
+Collects real-time system information:
+
+- CPU Usage
+- RAM Usage
+- Disk Usage
+
+### Analyze
+
+Identifies:
+
+- Top RAM-consuming processes
+- Top CPU-consuming processes
+- Potential optimization candidates
+
+### Decide
+
+Evaluates the current system state and generates recommendations based on predefined rules.
+
+### Act
+
+Allows the user to execute safe optimization actions through the dashboard.
 
 ---
 
-## Functionality
+# Features
 
-- Monitor CPU usage
-- Monitor RAM usage
-- Monitor Disk usage
-- Identify top CPU-consuming processes
-- Identify top RAM-consuming processes
-- Evaluate system health status
-- Generate recommendations based on resource usage
-- Display optimization candidates
-- Record actions and events in a log file
-- Provide a web-based dashboard for monitoring
+- Real-time CPU monitoring
+- Real-time RAM monitoring
+- Real-time Disk monitoring
+- Top CPU process analysis
+- Top RAM process analysis
+- System health evaluation
+- Rule-based recommendation engine
+- Safe optimization candidate detection
+- Process termination actions
+- Activity logging
+- Web-based monitoring dashboard
+- Responsive user interface
 
 ---
 
-## Development History
+# Optimization Mechanism
+
+The system includes an optimization module that can take corrective actions when the user decides to optimize the system.
+
+The optimization process follows these steps:
+
+1. Analyze currently running processes.
+2. Compare processes against a predefined safe-process list.
+3. Identify the highest resource-consuming processes among the safe candidates.
+4. Display these processes in the **Optimization Candidates** section.
+5. When the user clicks the **Optimize System** button, the system:
+   - Selects the top resource-consuming candidate processes.
+   - Terminates the selected processes.
+   - Records the action in the activity log.
+
+Example:
+
+```text
+Optimization Candidates
+
+Spotify.exe            245 MB
+Discord.exe            180 MB
+WindowsCamera.exe      120 MB
+```
+
+After clicking **Optimize System**, the agent will terminate the listed candidate processes and write the action to `logs/history.log`.
+
+Only processes included in the predefined safe-process list are eligible for automatic termination. Critical operating system processes are excluded to prevent system instability.
+
+---
+
+# Development History
 
 The project was developed in three stages.
 
-**Stage 1 – Terminal Application**
+## Stage 1 — Terminal Application
 
 File:
 
@@ -45,9 +102,19 @@ File:
 main.py
 ```
 
-Implemented basic monitoring, process analysis, and recommendation generation through a terminal interface.
+Implemented:
 
-**Stage 2 – Desktop GUI**
+- CPU monitoring
+- RAM monitoring
+- Disk monitoring
+- Process analysis
+- Recommendation generation
+
+through a terminal interface.
+
+---
+
+## Stage 2 — Desktop GUI
 
 File:
 
@@ -55,9 +122,17 @@ File:
 dashboard.py
 ```
 
-Added a graphical interface using CustomTkinter for real-time monitoring.
+Implemented:
 
-**Stage 3 – Web Dashboard (Final Version)**
+- CustomTkinter interface
+- Live monitoring dashboard
+- Process visualization
+
+through a desktop application.
+
+---
+
+## Stage 3 — Web Dashboard (Final Version)
 
 File:
 
@@ -65,29 +140,36 @@ File:
 app.py
 ```
 
-Migrated the project to a Flask-based web application and redesigned the user interface for easier monitoring and management.
+Implemented:
 
-The final version of the project is the Flask implementation in `app.py`.
+- Flask web application
+- Modern monitoring dashboard
+- Decision engine visualization
+- Optimization candidates section
+- Activity log viewer
+- Process optimization actions
+
+**Final Version:** `app.py`
 
 ---
 
-## Screenshots
+# Screenshots
 
-Dashboard
+## Main Dashboard
 
 ![Dashboard](screenshots/dashboard.png)
 
-Monitoring
+## Resource Monitoring
 
 ![Monitoring](screenshots/monitoring.png)
 
-Optimization
+## Optimization Interface
 
 ![Optimization](screenshots/optimization.png)
 
 ---
 
-## Technologies Used
+# Technologies Used
 
 - Python
 - Flask
@@ -95,10 +177,11 @@ Optimization
 - HTML
 - CSS
 - Bootstrap
+- CustomTkinter
 
 ---
 
-## Project Structure
+# Project Structure
 
 ```text
 AI-System-Resource-Manager-Agent
@@ -118,8 +201,12 @@ AI-System-Resource-Manager-Agent
 │   └── style.css
 │
 ├── screenshots/
+│   ├── dashboard.png
+│   ├── monitoring.png
+│   └── optimization.png
 │
 ├── logs/
+│   └── .gitkeep
 │
 ├── app.py
 ├── dashboard.py
@@ -131,7 +218,7 @@ AI-System-Resource-Manager-Agent
 
 ---
 
-## Installation
+# Installation
 
 Clone the repository:
 
@@ -153,6 +240,8 @@ python -m venv venv
 
 Activate the virtual environment:
 
+Windows:
+
 ```bash
 venv\Scripts\activate
 ```
@@ -165,7 +254,7 @@ pip install -r requirements.txt
 
 ---
 
-## Running the Application
+# Running the Application
 
 Run the Flask application:
 
@@ -173,7 +262,7 @@ Run the Flask application:
 python app.py
 ```
 
-Open the following address in a web browser:
+Open the following address in your browser:
 
 ```text
 http://127.0.0.1:5000
@@ -181,8 +270,27 @@ http://127.0.0.1:5000
 
 ---
 
-## Author
+# Future Improvements
 
-Rio  
-Undergraduate Student, Computer Science  
+Potential future enhancements include:
+
+- Automatic dashboard refresh using AJAX/WebSockets
+- Machine learning-based resource prediction
+- User-configurable optimization policies
+- Process whitelist and blacklist management
+- Email or desktop notifications
+- Historical resource usage graphs
+- Multi-system monitoring support
+
+---
+
+# Author
+
+Ahammed Tanim
+
+Computer Science Undergraduate Student
+
 Sejong University
+
+---
+
