@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI System Resource Manager Agent</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="app-shell">
+<header class="topbar d-flex align-items-center justify-content-between flex-wrap">
+<div class="topbar-brand">
+<span class="brand-title">AI System Resource Manager Agent</span>
+<span class="brand-subtitle">Operating System Resource Monitor</span>
+</div>
+<div class="topbar-controls d-flex align-items-center gap-3">
+<div class="status-indicator-wrap d-flex align-items-center gap-2">
+<span class="signal-dot"></span>
+<span class="signal-text">{{ status|default('UNKNOWN')|upper }}</span>
+</div>
+<a class="refresh-button" href="{{ url_for('home') }}" aria-label="Refresh dashboard">
+<i class="bi bi-arrow-clockwise"></i>
+</a>
+<time class="clock-text" datetime="{{ current_time or '' }}">{{ current_time or '—' }}</time>
+</div>
+</header>
+<main class="dashboard-grid">
+<section class="panel section-panel" aria-labelledby="resource-heading">
+<div class="section-header">
+<h2 id="resource-heading">Resource Monitoring</h2>
+</div>
+<dl class="metrics-grid">
+<div class="metric-item">
+<dt>CPU</dt>
+<dd>
+<meter class="usage-meter {{ 'usage-red' if cpu >= 85 else 'usage-yellow' if cpu >= 70 else 'usage-cyan' }}" value="{{ cpu }}" min="0" max="100" low="70" high="85" optimum="50"></meter>
+<span class="metric-value">{{ cpu }}%</span>
+</dd>
+</div>
+<div class="metric-item">
+<dt>RAM</dt>
+<dd>
+<meter class="usage-meter {{ 'usage-red' if ram >= 85 else 'usage-yellow' if ram >= 70 else 'usage-cyan' }}" value="{{ ram }}" min="0" max="100" low="70" high="85" optimum="50"></meter>
+<span class="metric-value">{{ ram }}%</span>
+</dd>
+</div>
+<div class="metric-item">
+<dt>DISK</dt>
+<dd>
+<meter class="usage-meter {{ 'usage-red' if disk >= 85 else 'usage-yellow' if disk >= 70 else 'usage-cyan' }}" value="{{ disk }}" min="0" max="100" low="70" high="85" optimum="50"></meter>
+<span class="metric-value">{{ disk }}%</span>
+</dd>
+</div>
+</dl>
+</section>
+<section class="panel process-panel process-ram" aria-labelledby="ram-heading">
+<div class="section-header">
+<h2 id="ram-heading">Top RAM Processes</h2>
+</div>
+<div class="table-wrap">
+<table class="table monitor-table mb-0">
+<thead>
+<tr>
+<th>Process Name</th>
+<th>RAM Usage</th>
+</tr>
+</thead>
+<tbody>
+{% for process in ram_processes %}
+<tr>
+<td>{{ process.name }}</td>
+<td>{{ process.memory | round(2) }} MB</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel process-panel process-cpu" aria-labelledby="cpu-heading">
+<div class="section-header">
+<h2 id="cpu-heading">Top CPU Processes</h2>
+</div>
+<div class="table-wrap">
+<table class="table monitor-table mb-0">
+<thead>
+<tr>
+<th>Process Name</th>
+<th>CPU Usage</th>
+</tr>
+</thead>
+<tbody>
+{% for process in cpu_processes %}
+<tr>
+<td>{{ process.name }}</td>
+<td>{{ process.cpu | round(2) }}%</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel health-panel" aria-labelledby="health-heading">
+<div class="section-header">
+<h2 id="health-heading">System Health & Optimization</h2>
+</div>
+<div class="health-grid">
+<div class="health-card">
+<h3>System Status</h3>
+<div class="status-box">
+<span class="status-chip status-chip-{{ status|lower }}">{{ status|default('UNKNOWN')|upper }}</span>
+</div>
+<p class="status-note">Current system health state</p>
+</div>
+<div class="health-card">
+<h3>Optimization Candidates</h3>
+{% if candidates %}
+<div class="table-wrap">
+<table class="table monitor-table mb-0">
+<thead>
+<tr>
+<th>Process</th>
+<th>Memory Usage</th>
+</tr>
+</thead>
+<tbody>
+{% for item in candidates %}
+<tr>
+<td>{{ item.name }}</td>
+<td>{{ item.memory | round(2) }} MB</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+{% else %}
+<p class="status-note">No safe optimization candidates found.</p>
+{% endif %}
+</div>
+</div>
+</section>
+<section class="panel analysis-panel" aria-labelledby="analysis-heading">
+<div class="section-header">
+<h2 id="analysis-heading">Agent Decision Engine</h2>
+</div>
+<div class="analysis-grid">
+<div class="analysis-block">
+<h3>Analysis</h3>
+<p class="analysis-text">{{ message or 'No analysis available.' }}</p>
+</div>
+<div class="analysis-block">
+<h3>Recommended Actions</h3>
+<ul class="analysis-list">
+{% for recommendation in recommendations %}
+<li>{{ recommendation }}</li>
+{% endfor %}
+</ul>
+</div>
+</div>
+</section>
+<section class="panel log-panel" aria-labelledby="log-heading">
+<div class="section-header">
+<h2 id="log-heading">Activity Log</h2>
+</div>
+<pre class="log-output">
+{% for entry in logs %}{{ entry }}{% endfor %}
+</pre>
+</section>
+<section class="panel action-panel" aria-labelledby="action-heading">
+<div class="section-header">
+
+</div>
+<a class="action-button" href="{{ url_for('optimize') }}">⚡ OPTIMIZE SYSTEM</a>
+</section>
+</main>
+</div>
+</body>
+</html>

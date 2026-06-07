@@ -1,18 +1,74 @@
+# =========================
+
 # Virtual Environment
+
+# =========================
+
 venv/
+.venv/
+
+# =========================
 
 # Python Cache
-__pycache__/
+
+# =========================
+
+**pycache**/
 *.pyc
+*.pyo
+*.pyd
+
+# =========================
+
+# Environment Variables
+
+# =========================
+
+.env
+
+# =========================
 
 # Logs
-logs/
 
-# VS Code Settings
+# =========================
+
+logs/history.log
+*.log
+
+# Keep logs folder in Git
+
+!logs/.gitkeep
+
+# =========================
+
+# VS Code
+
+# =========================
+
 .vscode/
 
+# =========================
+
 # Reports
+
+# =========================
+
 reports/*.txt
 
-# Spotify Pid and processes finder
+# =========================
+
+# Development / Testing Files
+
+# =========================
+
 find_spotify.py
+test_action.py
+
+# =========================
+
+# OS Files
+
+# =========================
+
+.DS_Store
+Thumbs.db

@@ -3,22 +3,15 @@ import psutil
 from modules.logger import write_log
 
 
-ALLOWED_PROCESSES = [
+SAFE_PROCESSES = [
     "Spotify.exe",
-    "chrome.exe",
-    "Code.exe",
     "Discord.exe",
-    "notepad.exe"
+    "notepad.exe",
+    "WindowsCamera.exe"
 ]
 
 
 def terminate_process(process_name):
-
-    if process_name not in ALLOWED_PROCESSES:
-        return (
-            False,
-            f"{process_name} is not allowed to be terminated."
-        )
 
     terminated_count = 0
 
@@ -47,12 +40,61 @@ def terminate_process(process_name):
             f"ACTION: {message}"
         )
 
-        return (
-            True,
-            message
+        return True, message
+
+    return False, f"{process_name} not found."
+
+
+def get_optimization_candidates():
+
+    processes = []
+
+    for process in psutil.process_iter(
+        ['pid', 'name', 'memory_info']
+    ):
+        try:
+
+            name = process.info['name']
+
+            if name in SAFE_PROCESSES:
+
+                memory_mb = (
+                    process.info['memory_info'].rss
+                    / (1024 * 1024)
+                )
+
+                processes.append({
+                    "name": name,
+                    "memory": memory_mb
+                })
+
+        except (
+            psutil.NoSuchProcess,
+            psutil.AccessDenied,
+            psutil.ZombieProcess
+        ):
+            pass
+
+    processes.sort(
+        key=lambda p: p["memory"],
+        reverse=True
+    )
+
+    return processes[:3]
+
+
+def optimize_system():
+
+    candidates = get_optimization_candidates()
+
+    results = []
+
+    for process in candidates:
+
+        success, message = terminate_process(
+            process["name"]
         )
 
-    return (
-        False,
-        f"{process_name} not found."
-    )
+        results.append(message)
+
+    return results

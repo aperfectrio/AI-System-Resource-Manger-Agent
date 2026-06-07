@@ -20,7 +20,8 @@ from modules.notifier import (
 )
 
 from modules.actions import (
-    terminate_process
+    optimize_system,
+    get_optimization_candidates
 )
 
 
@@ -30,7 +31,7 @@ ctk.set_default_color_theme("blue")
 
 app = ctk.CTk()
 app.title("AI System Resource Manager Agent")
-app.geometry("900x800")
+app.geometry("900x900")
 
 
 # ==========================
@@ -73,7 +74,7 @@ status_label.pack(pady=10)
 
 
 # ==========================
-# Recommendations Box
+# Recommendations
 # ==========================
 
 recommendation_box = ctk.CTkTextbox(
@@ -86,7 +87,7 @@ recommendation_box.pack(pady=10)
 
 
 # ==========================
-# RAM Processes Box
+# RAM Processes
 # ==========================
 
 ram_process_box = ctk.CTkTextbox(
@@ -99,7 +100,7 @@ ram_process_box.pack(pady=10)
 
 
 # ==========================
-# CPU Processes Box
+# CPU Processes
 # ==========================
 
 cpu_process_box = ctk.CTkTextbox(
@@ -112,27 +113,45 @@ cpu_process_box.pack(pady=10)
 
 
 # ==========================
+# Optimization Candidates
+# ==========================
+
+candidate_box = ctk.CTkTextbox(
+    app,
+    width=800,
+    height=120
+)
+
+candidate_box.pack(pady=10)
+
+
+# ==========================
 # Action Executor
 # ==========================
 
-def terminate_spotify():
+def optimize_system_action():
 
-    success, message = terminate_process(
-        "Spotify.exe"
-    )
+    results = optimize_system()
 
     recommendation_box.insert(
         "end",
-        f"\n\n[ACTION] {message}"
+        "\n\n===== SYSTEM OPTIMIZATION =====\n"
     )
 
-spotify_button = ctk.CTkButton(
+    for result in results:
+        recommendation_box.insert(
+            "end",
+            f"{result}\n"
+        )
+
+
+optimize_button = ctk.CTkButton(
     app,
-    text="Terminate Spotify",
-    command=terminate_spotify
+    text="Optimize System",
+    command=optimize_system_action
 )
 
-spotify_button.pack(pady=10)
+optimize_button.pack(pady=10)
 
 
 # ==========================
@@ -159,6 +178,8 @@ def update_dashboard():
 
     cpu_processes = get_top_cpu_processes()
 
+    candidates = get_optimization_candidates()
+
     # --------------------------
     # Statistics
     # --------------------------
@@ -172,7 +193,7 @@ def update_dashboard():
     )
 
     # --------------------------
-    # Notification Status
+    # Notification
     # --------------------------
 
     status_label.configure(
@@ -240,6 +261,37 @@ def update_dashboard():
             f"{process['name']} - "
             f"{process['cpu']:.2f}%\n"
         )
+
+    # --------------------------
+    # Optimization Candidates
+    # --------------------------
+
+    candidate_box.delete(
+        "1.0",
+        "end"
+    )
+
+    candidate_box.insert(
+        "end",
+        "Optimization Candidates\n\n"
+    )
+
+    if len(candidates) == 0:
+
+        candidate_box.insert(
+            "end",
+            "No safe optimization candidates found."
+        )
+
+    else:
+
+        for process in candidates:
+
+            candidate_box.insert(
+                "end",
+                f"{process['name']} - "
+                f"{process['memory']:.2f} MB\n"
+            )
 
     app.after(
         1000,
